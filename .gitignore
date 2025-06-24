@@ -7,6 +7,7 @@
 *.exp
 *.lib
 *.ldb
+vcpkg_installed/
 
 # User-specific files
 *.rsuser
@@ -388,6 +389,8 @@ FodyWeavers.xsd
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+.vscode/
+
 
 # Local History for Visual Studio Code
 .history/
@@ -401,7 +404,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-*.dll
-game_x64.exp
-game_x64.exp
 /pack
