@@ -408,3 +408,6 @@ FodyWeavers.xsd
 
 # Build batch files
 build.bat
+
+# Quake stuff
+*.pak
