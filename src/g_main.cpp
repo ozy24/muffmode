@@ -1211,13 +1211,6 @@ static void Entities_Reset(bool reset_players, bool reset_ghost, bool reset_scor
 	// reset the players
 	if (reset_players) {
 		for (auto ec : active_clients()) {
-			// [muff] Store bot team before reset to preserve it
-			team_t saved_bot_team = TEAM_NONE;
-			bool is_bot = (ec->svflags & SVF_BOT) || ec->client->sess.is_a_bot;
-			if (is_bot && ClientIsPlaying(ec->client)) {
-				saved_bot_team = ec->client->sess.team;
-			}
-
 			ec->client->resp.ctf_state = 0;
 			if (reset_score)
 				ec->client->resp.score = 0;
@@ -1247,14 +1240,6 @@ static void Entities_Reset(bool reset_players, bool reset_ghost, bool reset_scor
 				ec->client->ps.gunskin = 0;
 				gi.linkentity(ec);
 				//}
-			}
-
-			// [muff] Restore bot team assignment to keep them playing
-			if (is_bot && saved_bot_team != TEAM_NONE) {
-				ec->client->sess.team = saved_bot_team;
-				// Ensure bot SVF flags are preserved
-				if (ec->client->sess.is_a_bot)
-					ec->svflags |= SVF_BOT;
 			}
 		}
 
