@@ -405,3 +405,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /pack
+
+# Build batch files
+build.bat
