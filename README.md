@@ -1,3 +1,7 @@
+This is a fork of Muff Mode v0.19.50 with a focus on deathmatch/ffa, bugfixes and stability improvments.
+
+
+
 # Welcome to Muff Mode BETA!
 
 ## What is Muff Mode?
