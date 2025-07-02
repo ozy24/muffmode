@@ -366,14 +366,14 @@ static USE(use_target_changelevel) (gentity_t *self, gentity_t *other, gentity_t
 			return;
 
 	// if noexit, do a ton of damage to other
-	if (deathmatch->integer && g_gametype->integer != GT_RACE && !g_dm_allow_exit->integer && other != world) {
+	if (deathmatch->integer && !g_dm_allow_exit->integer && other != world) {
 		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 10 * other->max_health, 1000, DAMAGE_NONE, MOD_EXIT);
 		return;
 	}
 
 	// if multiplayer, let everyone know who hit the exit
 	if (deathmatch->integer) {
-		if (g_gametype->integer == GT_RACE) {
+		if (false) { // Race mode removed
 			if (!IsCombatDisabled()) {
 				if (level.match_state == MATCH_IN_PROGRESS) {
 					int old_score = activator->client->resp.score;

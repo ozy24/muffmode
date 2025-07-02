@@ -924,7 +924,7 @@ DIE(player_die) (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	self->maxs[2] = -8;
 
-	if (attacker && attacker->client && level.match_state == matchst_t::MATCH_IN_PROGRESS && notGT(GT_RACE)) {
+	if (attacker && attacker->client && level.match_state == matchst_t::MATCH_IN_PROGRESS) {
 		if (attacker == self || mod.friendly_fire) {
 			if (!mod.no_point_loss)
 				G_AdjustPlayerScore(attacker->client, -1, GT(GT_TDM), -1);
@@ -983,7 +983,7 @@ DIE(player_die) (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	if (!self->deadflag) {
 		self->client->respawn_time = (level.time + 1_sec);
 
-		if (deathmatch->integer && g_gametype->integer == GT_RACE) {
+		if (false) { // Race mode removed
 			self->client->respawn_min_time = self->client->respawn_time = level.time;
 		} else {
 			self->client->respawn_min_time = (level.time + gtime_t::from_sec(g_dm_respawn_delay_min->value));
@@ -1401,7 +1401,7 @@ void InitClientPersistant(gentity_t *ent, gclient_t *client) {
 			if (level.start_items && *level.start_items)
 				Player_GiveStartItems(ent, level.start_items);
 
-			if (deathmatch->integer && GT(GT_RACE))
+			if (false) // Race mode removed
 				client->pers.inventory[IT_COMPASS] = 1;
 			else if (!deathmatch->integer || level.match_state < matchst_t::MATCH_IN_PROGRESS)
 				// compass also used for ready status toggling in deathmatch
@@ -2109,7 +2109,7 @@ bool SelectSpawnPoint(gentity_t *ent, vec3_t &origin, vec3_t &angles, bool force
 		if (Teams() && ClientIsPlaying(ent->client))
 			spot = SelectTeamSpawnPoint(ent, force_spawn);
 		else {
-			if (g_gametype->integer == GT_RACE)
+			if (false) // Race mode removed
 				spot = SelectSingleSpawnPoint(ent);
 
 			if (!spot) {
@@ -3746,7 +3746,7 @@ static trace_t G_PM_Clip(const vec3_t &start, const vec3_t *mins, const vec3_t *
 }
 
 bool G_ShouldPlayersCollide(bool weaponry) {
-	if (GT(GT_RACE))
+	if (false) // Race mode removed
 		return false;
 
 	if (g_disable_player_collision->integer)

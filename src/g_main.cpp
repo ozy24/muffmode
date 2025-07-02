@@ -262,7 +262,6 @@ int _gt[] = {
 	/* GT_RR */ GTF_TEAMS | GTF_ROUNDS | GTF_ARENA,
 	/* GT_LMS */ GTF_ELIMINATION,
 	/* GT_HORDE */ GTF_ROUNDS,
-	/* GT_RACE */ GTF_ARENA,
 	/* GT_BALL */ 0
 };
 
@@ -1512,9 +1511,9 @@ void Match_Start() {
 	if (Round_StartNew())
 		return;
 
-	gi.LocBroadcast_Print(PRINT_CENTER, GT(GT_RACE) ? "GO!" : "FIGHT!");
+	gi.LocBroadcast_Print(PRINT_CENTER, "FIGHT!");
 	//gi.positioned_sound(world->s.origin, world, CHAN_AUTO | CHAN_RELIABLE, gi.soundindex("misc/tele_up.wav"), 1, ATTN_NONE, 0);
-	AnnouncerSound(world, GT(GT_RACE) ? "go" : "fight", "misc/tele_up.wav", true);
+	AnnouncerSound(world, "fight", "misc/tele_up.wav", true);
 }
 
 /*
@@ -2451,7 +2450,7 @@ static int SortRanks(const void *a, const void *b) {
 		return -1;
 
 	// then sort by score
-	if (GT(GT_RACE)) {
+	if (false) { // Race mode removed
 		if (ca->resp.score > 0 && (ca->resp.score < cb->resp.score))
 			return -1;
 		if (cb->resp.score > 0 && (ca->resp.score > cb->resp.score))
@@ -3244,7 +3243,7 @@ void CheckDMExitRules() {
 		return;
 
 	// no score limit in race
-	if (GT(GT_RACE))
+	if (false) // Race mode removed
 		return;
 	
 	int	scorelimit = GT_ScoreLimit();

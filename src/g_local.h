@@ -10,7 +10,7 @@
 constexpr const char *GAMEVERSION = "baseq2";
 
 constexpr const char *GAMEMOD_TITLE = "Muff Mode BETA";
-constexpr const char *GAMEMOD_VERSION = "0.19.50.1";
+constexpr const char *GAMEMOD_VERSION = "0.19.50.2";
 
 //==================================================================
 
@@ -223,7 +223,6 @@ enum gametype_t {
 	GT_RR,
 	GT_LMS,
 	GT_HORDE,
-	GT_RACE,
 	GT_BALL,
 	GT_NUM_GAMETYPES
 };
@@ -257,7 +256,6 @@ constexpr const char *gt_short_name[GT_NUM_GAMETYPES] = {
 	"rr",
 	"lms",
 	"horde",
-	"race",
 	"ball"
 };
 constexpr const char *gt_short_name_upper[GT_NUM_GAMETYPES] = {
@@ -272,7 +270,6 @@ constexpr const char *gt_short_name_upper[GT_NUM_GAMETYPES] = {
 	"REDROVER",
 	"LMS",
 	"HORDE",
-	"RACE",
 	"BALL",
 };
 constexpr const char *gt_long_name[GT_NUM_GAMETYPES] = {
@@ -287,7 +284,6 @@ constexpr const char *gt_long_name[GT_NUM_GAMETYPES] = {
 	"Red Rover",
 	"Last Man Standing",
 	"Horde Mode",
-	"Race",
 	"ProBall"
 };
 

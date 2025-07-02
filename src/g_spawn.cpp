@@ -959,7 +959,6 @@ static constexpr const char *gt_spawn_string[GT_NUM_GAMETYPES] = {
 	"rr",
 	"lms",
 	"horde",
-	"race",
 	"ball"
 };
 
@@ -2127,20 +2126,6 @@ void GT_SetLongName(void) {
 				s = "Quad Hog Horde";
 			} else {
 				s = gt_long_name[GT_HORDE];
-			}
-		} else if (GT(GT_RACE)) {
-			if (g_instagib->integer) {
-				s = "Insta-Race";
-			} else if (g_vampiric_damage->integer) {
-				s = "Vampiric Race";
-			} else if (g_frenzy->integer) {
-				s = "Frenzy Race";
-			} else if (g_nadefest->integer) {
-				s = "NadeFest Race";
-			} else if (g_quadhog->integer) {
-				s = "Quad Hog Race";
-			} else {
-				s = gt_long_name[GT_RACE];
 			}
 		} else if (GT(GT_BALL)) {
 			if (g_instagib->integer) {

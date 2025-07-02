@@ -979,7 +979,7 @@ void TeleportPlayerToRandomSpawnPoint(gentity_t *ent, bool fx) {
 }
 
 bool InCoopStyle() {
-	return coop->integer || GT(GT_HORDE) || GT(GT_RACE);
+	return coop->integer || GT(GT_HORDE);
 }
 
 /*

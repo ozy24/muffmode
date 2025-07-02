@@ -19,7 +19,7 @@ bool InfiniteAmmoOn(gitem_t *item) {
 	if (item && item->flags & IF_NO_INFINITE_AMMO)
 		return false;
 
-	return g_infinite_ammo->integer || (deathmatch->integer && (g_instagib->integer || g_nadefest->integer || g_gametype->integer == GT_RACE));
+	return g_infinite_ammo->integer || (deathmatch->integer && (g_instagib->integer || g_nadefest->integer));
 }
 
 /*

@@ -599,7 +599,7 @@ static void DuelScoreboardMessage(gentity_t *ent, gentity_t *killer) {
 
 			fmt::format_to(std::back_inserter(entry),
 				FMT_STRING("client {} {} {} {} {} {} "),
-				x, y, level.sorted_clients[i], cl->resp.score, cl->ping, GT(GT_RACE) ? cl->resp.score : 0);	// (level.time - cl->sess.team_join_time).minutes<int>());
+				x, y, level.sorted_clients[i], cl->resp.score, cl->ping, 0);	// (level.time - cl->sess.team_join_time).minutes<int>());
 
 			if (string.length() + entry.length() > MAX_STRING_CHARS)
 				break;
@@ -862,7 +862,7 @@ void DeathmatchScoreboardMessage(gentity_t *ent, gentity_t *killer) {
 
 		fmt::format_to(std::back_inserter(string), FMT_STRING("ifgef {} yb -48 xv 0 loc_cstring2 0 \"$m_eou_press_button\" endif "), (level.intermission_server_frame + (5_sec).frames()));
 	} else if (level.match_state == MATCH_IN_PROGRESS) {
-		const char *score = (g_gametype->integer == GT_RACE) ? G_TimeStringMs(ent->client->resp.score, false) : G_Fmt("{}", ent->client->resp.score).data();
+		const char *score = G_Fmt("{}", ent->client->resp.score).data();
 		if (ent->client && ClientIsPlaying(ent->client) && ent->client->resp.score && level.num_playing_clients > 1) {
 			fmt::format_to(std::back_inserter(string), FMT_STRING("xv 0 yv -10 cstring2 \"{} place with a score of {}\" "),
 				G_PlaceString(ent->client->resp.rank + 1), score);
@@ -1846,11 +1846,7 @@ void G_SetStats(gentity_t *ent) {
 				break;
 			case matchst_t::MATCH_WARMUP_DEFAULT:
 			case matchst_t::MATCH_WARMUP_READYUP:
-				if (GT(GT_RACE)) {
-					gtime_t t2 = (level.time - ent->client->pers.last_spawn_time);
-					s1 = G_Fmt("WARMUP ({})", G_TimeStringMs(t2.milliseconds(), false)).data();
-				} else
-					s1 = "WARMUP";
+							s1 = "WARMUP";
 				break;
 			case matchst_t::MATCH_COUNTDOWN:
 				s1 = "COUNTDOWN";
@@ -1870,13 +1866,9 @@ void G_SetStats(gentity_t *ent) {
 					} else {
 						s1 = "";
 					}
-				} else {
-					if (GT(GT_RACE)) {
-						gtime_t t2 = (level.time - ent->client->pers.last_spawn_time);
-						s1 = G_Fmt("{} ({})", G_TimeString(t, false), G_TimeStringMs(t2.milliseconds(), false)).data();
-					} else
-						s1 = G_TimeString(t, false);
-				}
+						} else {
+			s1 = G_TimeString(t, false);
+		}
 				break;
 			}
 			}

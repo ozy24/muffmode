@@ -851,7 +851,8 @@ static void CG_ExecuteLayoutString(const char *s, vrect_t hud_vrect, vrect_t hud
 				token = COM_Parse(&s);
 				time = atoi(token);
 
-				const char *scr = time > 0 ? CG_TimeStringMs(time) : G_Fmt("{}", score).data();
+				// Race mode removed - always show score, never format as time
+				const char *scr = G_Fmt("{}", score).data();
 
 				cgi.SCR_SetAltTypeface(ui_acc_alttypeface->integer && true);
 				if (!scr_usekfont->integer)

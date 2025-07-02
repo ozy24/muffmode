@@ -1070,7 +1070,7 @@ static void Cmd_Kill_f(gentity_t *ent) {
 	if (IsCombatDisabled())
 		return;
 
-	if (GT(GT_RACE)) {
+	if (false) { // Race mode removed
 		ClientSpawn(ent);
 		G_PostRespawn(ent);
 		return;
