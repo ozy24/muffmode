@@ -196,4 +196,14 @@ The Big Gametype and Mapping Update!
 			Fires targets only if monsters are present in the level.
 			Auto-removed in deathmatch (except horde mode).
 			ONCE : will be removed after firing once
+
+* MAP TRANSITION CRASH FIXES:
+	- Fixed map queue system memory corruption that could cause crashes when switching maps
+	- Added proper entity reference cleanup during map transitions
+	- Enhanced bot team preservation safety with null pointer checks
+	- Added map name validation to prevent crashes from invalid map transitions
+	- Improved memory management during level changes
+	- Fixed vector element removal in map queue system to prevent memory leaks
+	- Added comprehensive entity cleanup including follow targets, viewed entities, and bot goals
+	- Enhanced safety checks for all entity references before map transitions
 		

@@ -1213,7 +1213,7 @@ static void Entities_Reset(bool reset_players, bool reset_ghost, bool reset_scor
 			// [muff] Store bot team before reset to preserve it
 			team_t saved_bot_team = TEAM_NONE;
 			bool is_bot = (ec->svflags & SVF_BOT) || ec->client->sess.is_a_bot;
-			if (is_bot && ClientIsPlaying(ec->client)) {
+			if (is_bot && ec->client && ClientIsPlaying(ec->client)) {
 				saved_bot_team = ec->client->sess.team;
 			}
 
@@ -1249,7 +1249,7 @@ static void Entities_Reset(bool reset_players, bool reset_ghost, bool reset_scor
 			}
 
 			// [muff] Restore bot team assignment to keep them playing
-			if (is_bot && saved_bot_team != TEAM_NONE) {
+			if (is_bot && ec->client && saved_bot_team != TEAM_NONE) {
 				ec->client->sess.team = saved_bot_team;
 				// Ensure bot SVF flags are preserved
 				if (ec->client->sess.is_a_bot)
@@ -2720,7 +2720,10 @@ static bool MQ_Update() {
 		return false;
 	}
 
-	//TODO: remove empty elements?
+	// Remove empty elements from the queue
+	auto it = std::remove_if(game.mapqueue.begin(), game.mapqueue.end(), 
+		[](const std::string& s) { return s.empty(); });
+	game.mapqueue.erase(it, game.mapqueue.end());
 
 	return true;
 }
@@ -2767,7 +2770,9 @@ static void MQ_Remove_Index(gentity_t *ent, int num) {
 	if (!MQ_Update())
 		return;
 
-	game.mapqueue[num].clear();
+	if (num >= 0 && num < game.mapqueue.size()) {
+		game.mapqueue.erase(game.mapqueue.begin() + num);
+	}
 }
 
 static const char *MQ_Go_Next() {
@@ -3343,6 +3348,22 @@ void BeginIntermission(gentity_t *targ) {
 
 	// destroy all player trails
 	PlayerTrail_Destroy(nullptr);
+	
+	// Clean up any dangling entity references before map transition
+	for (auto ec : active_clients()) {
+		if (ec->client->follow_target && !ec->client->follow_target->inuse) {
+			ec->client->follow_target = nullptr;
+		}
+		if (ec->client->viewed && !ec->client->viewed->inuse) {
+			ec->client->viewed = nullptr;
+		}
+		// Clear any bot-specific entity references
+		if (ec->svflags & SVF_BOT) {
+			// Clear any dangling bot entity references
+			ec->goalentity = nullptr;
+			ec->movetarget = nullptr;
+		}
+	}
 
 	// [Paril-KEX] update game level entry
 	G_UpdateLevelEntry();
@@ -3480,6 +3501,12 @@ void ExitLevel() {
 
 	if (level.changemap == nullptr) {
 		gi.Com_Error("Got null changemap when trying to exit level. Was a trigger_changelevel configured correctly?");
+		return;
+	}
+	
+	// Additional safety check for invalid map names
+	if (!level.changemap[0]) {
+		gi.Com_Error("Got empty changemap when trying to exit level.");
 		return;
 	}
 
