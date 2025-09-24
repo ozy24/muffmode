@@ -2553,41 +2553,45 @@ void CalculateRanks() {
 		}
 	}
 
-	int lead_score = game.clients[level.sorted_clients[0]].resp.score;
-
 	qsort(level.sorted_clients, level.num_connected_clients, sizeof(level.sorted_clients[0]), SortRanks);
 
-	// set the rank value for all clients that are connected and not spectators
-	if (teams && notGT(GT_RR)) {
-		// in team games, rank is just the order of the teams, 0=red, 1=blue, 2=tied
-		for (size_t i = 0; i < level.num_connected_clients; i++) {
-			cl = &game.clients[level.sorted_clients[i]];
-			if (level.team_scores[TEAM_RED] == level.team_scores[TEAM_BLUE]) {
-				cl->resp.rank = 2;
-			} else if (level.team_scores[TEAM_RED] > level.team_scores[TEAM_BLUE]) {
-				cl->resp.rank = 0;
-			} else {
-				cl->resp.rank = 1;
+	if (level.sorted_clients[0] >= 0) {
+		// set the rank value for all clients that are connected and not spectators
+		if (teams && notGT(GT_RR)) {
+			// in team games, rank is just the order of the teams, 0=red, 1=blue, 2=tied
+			for (size_t i = 0; i < level.num_connected_clients; i++) {
+				cl = &game.clients[level.sorted_clients[i]];
+				if (level.team_scores[TEAM_RED] == level.team_scores[TEAM_BLUE]) {
+					cl->resp.rank = 2;
+				}
+				else if (level.team_scores[TEAM_RED] > level.team_scores[TEAM_BLUE]) {
+					cl->resp.rank = 0;
+				}
+				else {
+					cl->resp.rank = 1;
+				}
 			}
 		}
-	} else {
-		int score = 0, new_score, rank;
+		else {
+			int score = 0, new_score, rank;
 
-		for (size_t i = 0; i < level.num_playing_clients; i++) {
-			if (game.clients[i].pers.connected) {
-				cl = &game.clients[level.sorted_clients[i]];
-				cl->resp.old_score = cl->resp.score;
-				new_score = cl->resp.score;
-				if (i == 0 || new_score != score) {
-					rank = i;
-					// assume we aren't tied until the next client is checked
-					game.clients[level.sorted_clients[i]].resp.rank = rank;
-				} else {
-					// we are tied with the previous client
-					game.clients[level.sorted_clients[i - 1]].resp.rank = rank | RANK_TIED_FLAG;
-					game.clients[level.sorted_clients[i]].resp.rank = rank | RANK_TIED_FLAG;
+			for (size_t i = 0; i < level.num_playing_clients; i++) {
+				if (game.clients[i].pers.connected) {
+					cl = &game.clients[level.sorted_clients[i]];
+					cl->resp.old_score = cl->resp.score;
+					new_score = cl->resp.score;
+					if (i == 0 || new_score != score) {
+						rank = i;
+						// assume we aren't tied until the next client is checked
+						game.clients[level.sorted_clients[i]].resp.rank = rank;
+					}
+					else {
+						// we are tied with the previous client
+						game.clients[level.sorted_clients[i - 1]].resp.rank = rank | RANK_TIED_FLAG;
+						game.clients[level.sorted_clients[i]].resp.rank = rank | RANK_TIED_FLAG;
+					}
+					score = new_score;
 				}
-				score = new_score;
 			}
 		}
 	}
